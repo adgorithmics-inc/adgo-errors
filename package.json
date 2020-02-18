@@ -1,6 +1,6 @@
 {
     "name": "@adgorithmics/adgo-errors",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "Error helper",
     "main": "index.node.js",
     "browser": "index.web.js",
