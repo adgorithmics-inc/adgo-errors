@@ -1,0 +1,9 @@
+{
+    "extends": [
+        "@adgorithmics/eslint-config-base",
+        "@adgorithmics/eslint-config-base/typescript"
+    ],
+    "env": {
+        "node": true
+    }
+}

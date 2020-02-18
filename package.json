@@ -1,0 +1,50 @@
+{
+    "name": "@adgorithmics/adgo-errors",
+    "version": "0.0.0",
+    "description": "Error helper",
+    "main": "index.node.js",
+    "browser": "index.web.js",
+    "types": "src/index.d.ts",
+    "files": [
+        "/src/**/*.d.ts",
+        "/index.web.js",
+        "/index.node.js"
+    ],
+    "scripts": {
+        "build": "webpack",
+        "precommit": "npm run lint",
+        "prepush": "npm run lint",
+        "lint": "concurrently \"npm run lint:eslint\" \"npm run lint:prettier\"",
+        "lint:eslint": "eslint . --ext ts",
+        "lint:eslint:fix": "eslint . --ext ts --fix",
+        "lint:prettier": "prettier \"./src/**/*.ts\" --ignore-path .eslintignore -l",
+        "lint:prettier:fix": "prettier \"./src/**/*.ts\" --ignore-path .eslintignore --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/adgorithmics-inc/adgo-errors.git"
+    },
+    "author": "Adgorithmics, Inc",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/adgorithmics-inc/adgo-errors/issues"
+    },
+    "homepage": "https://github.com/adgorithmics-inc/adgo-errors#readme",
+    "devDependencies": {
+        "@adgorithmics/eslint-config-base": "^1.5.0",
+        "concurrently": "5.1.0",
+        "prettier": "1.19.1",
+        "ts-loader": "6.2.1",
+        "typescript": "3.7.5",
+        "webpack": "4.41.6",
+        "webpack-cli": "3.3.11",
+        "eslint": "6.8.0",
+        "@typescript-eslint/eslint-plugin": "2.20.0",
+        "eslint-config-prettier": "6.10.0"
+    },
+    "prettier": {
+        "trailingComma": "all",
+        "tabWidth": 4,
+        "singleQuote": true
+    }
+}
