@@ -43,6 +43,7 @@ export const findKeyInObject = (
 
 export class AdgoError extends Error {
     code: string;
+    data: Record<string, unknown>;
 
     constructor(
         error: AdgoError | Error | string,
@@ -61,13 +62,10 @@ export class AdgoError extends Error {
 
         this.code = (error as AdgoError).code || (data.code as string) || code;
         this.name = (error as AdgoError).name || 'AdgoError';
+        this.data = { ...(error as AdgoError).data, ...data };
 
         if ((error as AdgoError).stack) {
             this.stack = (error as AdgoError).stack;
-        }
-
-        for (const key of Object.keys(data)) {
-            this[key] = data[key];
         }
     }
 }
