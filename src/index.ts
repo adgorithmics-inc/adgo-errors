@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import { isString, isObject, isArray, isError } from './types';
 
 export type matcherKey = string | number | null;
@@ -5,17 +6,25 @@ export type matcherKey = string | number | null;
 export const findKeyInObject = (
     obj: unknown,
     matcher: (key: matcherKey, value: unknown) => boolean,
-    fallback: unknown | null = null,
+    blacklistKeys: matcherKey[],
 ) => {
-    let result = fallback;
+    let result: unknown = null;
 
     const findValue = (key: matcherKey, value: unknown) => {
-        if (result !== fallback) {
+        if (result !== null) {
+            return;
+        }
+        if (blacklistKeys.includes(key)) {
             return;
         }
 
         if (isObject(value)) {
             Object.keys(value).forEach(key => findValue(key, value[key]));
+        }
+        if (isError(value)) {
+            ['message', ...Object.keys(value)].forEach(key =>
+                findValue(key, value[key]),
+            );
         }
         if (isArray(value)) {
             value.forEach((item: unknown, index: number) =>
@@ -62,7 +71,7 @@ export class AdgoError extends Error {
 
         this.code = (error as AdgoError).code || (data.code as string) || code;
         this.name = (error as AdgoError).name || 'AdgoError';
-        this.data = { ...(error as AdgoError).data, ...data };
+        this.data = merge({}, (error as AdgoError).data, data);
 
         if ((error as AdgoError).stack) {
             this.stack = (error as AdgoError).stack;
@@ -89,24 +98,20 @@ export const getErrorMessage = (
         'message',
         'error',
     ],
+    blacklistKeys: matcherKey[] = [],
 ) => {
     if (isString(error)) {
         return error;
     }
 
     for (const key of errorMessageKeys) {
-        if (isError(error)) {
-            if (error[key]) {
-                return error[key];
-            }
-        } else {
-            const result = findKeyInObject(
-                error,
-                (k, v) => k === key && typeof v === 'string',
-            );
-            if (result) {
-                return result;
-            }
+        const result = findKeyInObject(
+            error,
+            (k, v) => k === key && typeof v === 'string',
+            blacklistKeys,
+        );
+        if (result) {
+            return result as string;
         }
     }
 

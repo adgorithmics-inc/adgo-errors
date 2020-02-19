@@ -7,6 +7,7 @@
         "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
         "target": "es5",
+        "lib": ["dom", "es7"],
         "declaration": true
     },
     "include": ["src/**/*"],
