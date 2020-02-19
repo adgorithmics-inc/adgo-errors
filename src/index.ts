@@ -18,6 +18,11 @@ export const findKeyInObject = (
         if (isObject(value)) {
             Object.keys(value).forEach(key => findValue(key, value[key]));
         }
+        if (isError(value)) {
+            ['message', ...Object.keys(value)].forEach(key =>
+                findValue(key, value[key]),
+            );
+        }
         if (isArray(value)) {
             value.forEach((item: unknown, index: number) =>
                 findValue(index, item),
@@ -96,18 +101,12 @@ export const getErrorMessage = (
     }
 
     for (const key of errorMessageKeys) {
-        if (isError(error)) {
-            if (error[key]) {
-                return error[key];
-            }
-        } else {
-            const result = findKeyInObject(
-                error,
-                (k, v) => k === key && typeof v === 'string',
-            );
-            if (result) {
-                return result;
-            }
+        const result = findKeyInObject(
+            error,
+            (k, v) => k === key && typeof v === 'string',
+        );
+        if (result) {
+            return result;
         }
     }
 

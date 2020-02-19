@@ -8,4 +8,4 @@ export declare class AdgoError extends Error {
 export declare class LocalError extends AdgoError {
     constructor(error: AdgoError | Error | string, data?: Record<string, unknown>);
 }
-export declare const getErrorMessage: (error: unknown, fallbackMessage?: string, errorMessageKeys?: (string | number)[]) => any;
+export declare const getErrorMessage: (error: unknown, fallbackMessage?: string, errorMessageKeys?: (string | number)[]) => unknown;
