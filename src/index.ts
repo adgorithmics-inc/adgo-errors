@@ -1,3 +1,4 @@
+import merge from 'lodash.merge';
 import { isString, isObject, isArray, isError } from './types';
 
 export type matcherKey = string | number | null;
@@ -62,7 +63,7 @@ export class AdgoError extends Error {
 
         this.code = (error as AdgoError).code || (data.code as string) || code;
         this.name = (error as AdgoError).name || 'AdgoError';
-        this.data = { ...(error as AdgoError).data, ...data };
+        this.data = merge({}, (error as AdgoError).data, data);
 
         if ((error as AdgoError).stack) {
             this.stack = (error as AdgoError).stack;
