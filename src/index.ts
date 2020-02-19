@@ -6,12 +6,15 @@ export type matcherKey = string | number | null;
 export const findKeyInObject = (
     obj: unknown,
     matcher: (key: matcherKey, value: unknown) => boolean,
-    fallback: unknown | null = null,
+    blacklistKeys: matcherKey[],
 ) => {
-    let result = fallback;
+    let result: unknown = null;
 
     const findValue = (key: matcherKey, value: unknown) => {
-        if (result !== fallback) {
+        if (result !== null) {
+            return;
+        }
+        if (blacklistKeys.includes(key)) {
             return;
         }
 
@@ -95,6 +98,7 @@ export const getErrorMessage = (
         'message',
         'error',
     ],
+    blacklistKeys: matcherKey[] = [],
 ) => {
     if (isString(error)) {
         return error;
@@ -104,9 +108,10 @@ export const getErrorMessage = (
         const result = findKeyInObject(
             error,
             (k, v) => k === key && typeof v === 'string',
+            blacklistKeys,
         );
         if (result) {
-            return result;
+            return result as string;
         }
     }
 
