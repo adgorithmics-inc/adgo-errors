@@ -71,7 +71,11 @@ export class AdgoError extends Error {
 
         this.code = (error as AdgoError).code || (data.code as string) || code;
         this.name = (error as AdgoError).name || 'AdgoError';
-        this.data = merge({}, (error as AdgoError).data, data);
+        this.data = merge(
+            { skipSentry: false },
+            (error as AdgoError).data,
+            data,
+        );
 
         if ((error as AdgoError).stack) {
             this.stack = (error as AdgoError).stack;
@@ -84,7 +88,7 @@ export class LocalError extends AdgoError {
         error: AdgoError | Error | string,
         data: Record<string, unknown> = {},
     ) {
-        super(error, data, 'local_error');
+        super(error, { skipSentry: true, ...data }, 'local_error');
         this.name = 'LocalError';
     }
 }
