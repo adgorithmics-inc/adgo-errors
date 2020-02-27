@@ -51,6 +51,7 @@ export const findKeyInObject = (
 };
 
 export class AdgoError extends Error {
+    readonly __isAdgoError: boolean;
     code: string;
     data: Record<string, unknown>;
 
@@ -69,8 +70,14 @@ export class AdgoError extends Error {
             super();
         }
 
-        this.code = (error as AdgoError).code || (data.code as string) || code;
-        this.name = (error as AdgoError).name || 'AdgoError';
+        this.__isAdgoError = true;
+        this.code =
+            ((error as AdgoError).__isAdgoError && (error as AdgoError).code) ||
+            (data.code as string) ||
+            code;
+        this.name =
+            ((error as AdgoError).__isAdgoError && (error as AdgoError).name) ||
+            'AdgoError';
         this.data = merge({}, (error as AdgoError).data, data);
 
         if ((error as AdgoError).stack) {
