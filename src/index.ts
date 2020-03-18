@@ -78,7 +78,12 @@ export class AdgoError extends Error {
         this.name =
             ((error as AdgoError).__isAdgoError && (error as AdgoError).name) ||
             'AdgoError';
-        this.data = merge({}, (error as AdgoError).data, data);
+        this.data = merge(
+            {},
+            (error as AdgoError).data,
+            data,
+            !(error as AdgoError).__isAdgoError && { raw: error },
+        );
 
         if ((error as AdgoError).stack) {
             this.stack = (error as AdgoError).stack;
