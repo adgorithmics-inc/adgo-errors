@@ -82,7 +82,7 @@ export class AdgoError extends Error {
             {},
             (error as AdgoError).data,
             data,
-            !(error as AdgoError).__isAdgoError && { raw: error },
+            !(error as AdgoError).__isAdgoError && { originalError: error },
         );
 
         if ((error as AdgoError).stack) {
